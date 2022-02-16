@@ -26,13 +26,7 @@ public class Nota {
 
     // Lançando a execção , adicionei o aluno para facilitar qual  nota  não foi registrada em tal aluno.
     public boolean verificaNota() throws MinhaExcpetion {
-        
-        if(this.valor <= 10 && this.valor >= 0){
-            return true;
-        }else{
-            throw new MinhaExcpetion("Nota " + getValor() + " não registrada! O sistema aceita somente notas de 0 a 10!");
-        }
-       
+        return true;
     }
 
     public void setValor(double valor) {

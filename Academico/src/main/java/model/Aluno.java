@@ -7,6 +7,7 @@ import java.util.Collections;
 public class Aluno extends Usuario implements Interface_Tratamento {
 
     private String matricula;
+    private double frequencia;
     private Nota nota;
     private Curso curso;
     private static int qntAluno = 0;
@@ -72,33 +73,39 @@ public class Aluno extends Usuario implements Interface_Tratamento {
     }
 
     public String verificaSituacao() {
-        if (!listaGenericaNota.temItens()) {
-            return "Aluno sem avaliacoes.";
+        if (this.getCurso() != null) {
+            if (frequencia >= 75) {
+                if (listaGenericaNota.temItens()) {
+                    if (retornaMedia() <= 10 && retornaMedia() >= 0) {
+                        if (this.getCurso().getNivel().getnomeNivel() != "Medio") {
+                            if (retornaMedia() >= 7) {
+                                return "Aluno Aprovado!";
+                            } else if (retornaMedia() >= 4) {
+                                return "Deverá fazer prova substituva.";
+                            } else {
+                                return "Aluno reprovado por média final";
+                            }
+                        } else {
+                            if (retornaMedia() >= 6) {
+                                return "Aluno Aprovado!";
+                            } else if (retornaMedia() >= 4) {
+                                return "Deverá fazer prova substituva.";
+                            } else {
+                                return "Aluno reprovado por média final";
+                            }
+                        }
+                    } else {
+                        return "[Erro] A média final deve está entre 0 e 10!";
+                    }
+                } else {
+                    return "Aluno sem avaliações cadastradas";
+                }
+            } else {
+                return "Aluno reprovado por frequência";
+            }
+        } else {
+            return "O aluno não está matriculado em nenhum curso";
         }
-        if (this.getCurso() instanceof Curso_Superior){
-            if (retornaMedia() >= 7) {
-                return "Aluno Aprovado.";
-            }
-            if (retornaMedia() < 7 && retornaMedia() >= 4) {
-                return "Deverá fazer prova substituva.";
-            }
-            if (retornaMedia()  < 4) {
-                return "Aluno Reprovado.";
-            }
-        }
-        else if (this.getCurso() instanceof Curso_tecnico){
-            if (retornaMedia() >= 6) {
-                return "Aluno Aprovado.";
-            }
-            if (retornaMedia() < 6 && retornaMedia() >= 4) {
-                return "Deverá fazer prova substituva.";
-            }
-            if (retornaMedia()  < 4) {
-                return "Aluno Reprovado.";
-            }
-        }
-
-        return "Aluno não está matriculado em um curso.";
     }
 
     public String descricao() {
@@ -119,7 +126,7 @@ public class Aluno extends Usuario implements Interface_Tratamento {
     }
 
     public Curso getCurso() {
-        return new Curso(this.curso);
+        return this.curso;
     }
 
     public static int getQntAluno() {
@@ -138,7 +145,9 @@ public class Aluno extends Usuario implements Interface_Tratamento {
         this.curso = curso;
     }
 
+    public void setFrequencia(double frequencia) {this.frequencia = frequencia;}
 
+    public double getFrequencia () {return this.frequencia;}
 
     public String retornaCrescente() {
         String list = "Notas " + formaTratamento();
